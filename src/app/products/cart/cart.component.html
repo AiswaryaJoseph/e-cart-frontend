@@ -1,0 +1,202 @@
+<!-- <p>cart works!</p> -->
+<!-- empty cart -->
+<div class="container" *ngIf="allCart.length==0">
+    <div class="row">
+        <div class="col text-center">
+            <!-- empty cart image -->
+            <img class="mt-3"
+                src="https://p.turbosquid.com/ts-thumb/Cd/H5Uyka/Xzl9scHD/carrinho1/jpg/1270572521/600x600/fit_q87/59416e04ccd8a9121e03b4334ab5852816a9475d/carrinho1.jpg"
+                alt="">
+            <!-- button -->
+            <h2 class="mt-3">Your cart is empty... Please Add your Products...</h2>
+
+            <button class="btn btn-dark mb-2" routerLink="">Shop More</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- cart with content -->
+<!--  -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <!-- table -->
+            <table class="border border-2 border-dark my-5">
+                <thead>
+                    <tr class="border border-2 border-dark">
+                        <th class="border border-2 border-dark">Product Id</th>
+                        <th class="border border-2 border-dark">Name</th>
+                        <th class="border border-2 border-dark">Image</th>
+                        <th class="border border-2 border-dark">Quantity</th>
+                        <th class="border border-2 border-dark">Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border border-2 border-dark" *ngFor="let cart of allCart let i=index">
+                        <td class="border border-2 border-dark text-center">{{i+1}}</td>
+                        <td class="border border-2 border-dark">{{cart.title}}</td>
+                        <td class="border border-2 border-dark"><img width="100%" height="" [src]="cart.image"></td>
+
+                        <td class="border border-2 border-dark">
+                            <div class="d-flex flex-row">
+                                <button class="btn fw-bolder" (click)="decrementCart(cart.id)">-</button>
+                                <input type="text" [value]="cart.quantity" readonly class="form-control" width="10px">
+                                <button class="btn fw-bolder" (click)="incrementCart(cart.id)">+</button>
+
+                            </div>
+                        </td>
+
+                        <td class="border border-2 border-dark">${{cart.grandTotal}}</td>
+                        <td class="border border-2 border-dark text-center" (click)="removeCartItem(cart.id)"><i
+                                class="fa-solid fa-trash text-danger"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6 card shadow-5 my-5 p-3">
+            <!-- Summary -->
+            <h1 class="text-center fw-bolder">Product details</h1>
+            <h4 class="mt-3">Price : $ {{totalPrice}}</h4>
+            <h3>Discount : 50%</h3>
+            <h2>Your Grand Total : $ {{totalPrice}}</h2>
+
+            <hr>
+            <div class="text-center">
+                <button class="btn btn-success m-4" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Checkout</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Checkout Details</h1>
+                            <button type="button" (click)="modalclose()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h3 *ngIf="!paymentStatus" class="text-center">Enter Your Address Details</h3>
+                            <form *ngIf="!paymentStatus" [formGroup]="addressForm" (ngSubmit)="submitForm()">
+
+                                <div class="form-floating mb-3">
+                                    <input name="username" formControlName="username" type="text" class="form-control"
+                                        placeholder="Enter your name" required>
+                                    <label>Enter Your Name</label>
+
+                                    <div *ngIf="this.addressForm.get('username')?.errors && this.addressForm.get('username')?.touched"
+                                        class="text-danger">
+                                        Invalid username
+                                    </div>
+
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input name="housenumber" formControlName="housenumber" type="text"
+                                        class="form-control" placeholder="House Number" required>
+                                    <label>House Number</label>
+                                    <div *ngIf="this.addressForm.get('housenumber')?.errors && this.addressForm.get('housenumber')?.touched"
+                                        class="text-danger">
+                                        Invalid House Number
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input name="street" formControlName="street" type="text" class="form-control"
+                                        placeholder="Street Name" required>
+
+                                    <label>Street Name</label>
+                                    <div *ngIf="this.addressForm.get('street')?.errors && this.addressForm.get('street')?.touched"
+                                        class="text-danger">
+                                        Invalid Street
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input name="state" formControlName="state" type="text" class="form-control"
+                                        placeholder="State" required>
+                                    <label>State</label>
+                                    <div *ngIf="this.addressForm.get('state')?.errors && this.addressForm.get('state')?.touched"
+                                        class="text-danger">
+                                        Invalid State
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input name="pincode" formControlName="pincode" type="text" class="form-control"
+                                        placeholder="PinCode" required>
+                                    <label>Pincode</label>
+                                    <div *ngIf="this.addressForm.get('pincode')?.errors && this.addressForm.get('pincode')?.touched"
+                                        class="text-danger">
+                                        Invalid Pincode
+                                    </div>
+                                </div>
+
+                                <div class="form-floating">
+                                    <input name="mobileNumber" formControlName="mobileNumber" type="text"
+                                        class="form-control" placeholder="Mobile Number" required>
+                                    <label>Mobile Number</label>
+                                    <div *ngIf="this.addressForm.get('mobileNumber')?.errors && this.addressForm.get('mobileNumber')?.touched"
+                                        class="text-danger">
+                                        Invalid Mobile Number
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div>
+                                    <h2 class="text-danger">Total Amount :<i
+                                            class="fa-solid fa-dollar-sign fa-flip fa-lg"></i> {{totalPrice}}</h2>
+                                    <a (click)="offerClicked()" class="text-info" style="font-size: 30px; text-decoration: none;">Offers <i class="fa-sharp fa-solid fa-tags fa-fade fa-sm"></i>
+                                    </a>
+                                </div>
+                                <!-- discount div -->
+<div *ngIf="offerClick && !discountStatus">
+<!-- 10% discount -->
+<img *ngIf="totalPrice<300" (click)="discount(10)" width="100px" height="100px" src="https://png.pngtree.com/png-vector/20210129/ourmid/pngtree-10-percent-discount-offer-png-image_2858025.jpg" alt="">
+<!-- 50% discount -->
+<img *ngIf="totalPrice>500" (click)="discount(50)"width="100px" height="100px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDG3xJFKrWOMKF6iWxVrxKPTiu9NyM5FpigQ&usqp=CAU" alt="">
+</div>
+
+                                <hr>
+                                <!-- payment button -->
+                                <div class="text-center">
+                                    <button class="btn btn-success m-4" > Make payment</button>
+                                </div>
+
+                            </form>
+<!-- user Details -->
+
+<div *ngIf="paymentStatus" >
+<h5>User Address</h5>
+<p>{{username}}</p>
+<p>{{HouseNumber}}</p>
+<p>{{pincode}}</p>
+<p>{{phone}}</p>
+
+
+<div class="text-center">
+    <button (click)="makepay()" class="btn btn-success">Proceed to Pay</button>
+</div>
+
+<div *ngIf="proceedtopay">
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+</div>
+
+</div>
+
+                        </div>
+                        <!-- <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Understood</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

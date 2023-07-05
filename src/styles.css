@@ -1,1 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&family=Alfa+Slab+One&family=Bebas+Neue&family=Cabin+Sketch&family=Cookie&family=Courgette&family=Dancing+Script:wght@700&family=Dongle&family=Geologica:wght@600&family=Kanit&family=Karla&family=Oleo+Script&family=Pacifico&family=Pirata+One&family=Poppins:ital,wght@1,500&family=Rajdhani&family=Roboto+Slab&family=Rowdies:wght@700&family=Shrikhand&family=Tangerine:wght@700&family=Ubuntu&display=swap');
+*{
+    font-family: 'Geologica', sans-serif;
+}
